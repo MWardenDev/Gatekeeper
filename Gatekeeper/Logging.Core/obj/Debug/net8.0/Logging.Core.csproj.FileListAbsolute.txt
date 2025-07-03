@@ -1,0 +1,16 @@
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Logging.Core\bin\Debug\net8.0\Logging.Core.deps.json
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Logging.Core\bin\Debug\net8.0\Logging.Core.dll
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Logging.Core\bin\Debug\net8.0\Logging.Core.pdb
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Logging.Core\bin\Debug\net8.0\Gatekeeper.Models.dll
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Logging.Core\bin\Debug\net8.0\Gatekeeper.Models.pdb
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Logging.Core\obj\Debug\net8.0\Logging.Core.csproj.AssemblyReference.cache
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Logging.Core\obj\Debug\net8.0\Logging.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Logging.Core\obj\Debug\net8.0\Logging.Core.AssemblyInfoInputs.cache
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Logging.Core\obj\Debug\net8.0\Logging.Core.AssemblyInfo.cs
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Logging.Core\obj\Debug\net8.0\Logging.Core.csproj.CoreCompileInputs.cache
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Logging.Core\obj\Debug\net8.0\Logging.Core.sourcelink.json
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Logging.Core\obj\Debug\net8.0\Logging..D854F587.Up2Date
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Logging.Core\obj\Debug\net8.0\Logging.Core.dll
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Logging.Core\obj\Debug\net8.0\refint\Logging.Core.dll
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Logging.Core\obj\Debug\net8.0\Logging.Core.pdb
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Logging.Core\obj\Debug\net8.0\ref\Logging.Core.dll

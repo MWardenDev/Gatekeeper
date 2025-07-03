@@ -1,0 +1,16 @@
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Routing.Core\bin\Debug\net8.0\Routing.Core.deps.json
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Routing.Core\bin\Debug\net8.0\Routing.Core.dll
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Routing.Core\bin\Debug\net8.0\Routing.Core.pdb
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Routing.Core\bin\Debug\net8.0\Gatekeeper.Models.dll
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Routing.Core\bin\Debug\net8.0\Gatekeeper.Models.pdb
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Routing.Core\obj\Debug\net8.0\Routing.Core.csproj.AssemblyReference.cache
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Routing.Core\obj\Debug\net8.0\Routing.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Routing.Core\obj\Debug\net8.0\Routing.Core.AssemblyInfoInputs.cache
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Routing.Core\obj\Debug\net8.0\Routing.Core.AssemblyInfo.cs
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Routing.Core\obj\Debug\net8.0\Routing.Core.csproj.CoreCompileInputs.cache
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Routing.Core\obj\Debug\net8.0\Routing.Core.sourcelink.json
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Routing.Core\obj\Debug\net8.0\Routing..A41F67DA.Up2Date
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Routing.Core\obj\Debug\net8.0\Routing.Core.dll
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Routing.Core\obj\Debug\net8.0\refint\Routing.Core.dll
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Routing.Core\obj\Debug\net8.0\Routing.Core.pdb
+C:\Work\WorkRepo\gatekeeper\Gatekeeper\Routing.Core\obj\Debug\net8.0\ref\Routing.Core.dll

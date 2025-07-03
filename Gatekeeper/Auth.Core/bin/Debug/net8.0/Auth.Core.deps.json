@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Auth.Core/1.0.0": {
+        "dependencies": {
+          "Gatekeeper.Models": "1.0.0"
+        },
+        "runtime": {
+          "Auth.Core.dll": {}
+        }
+      },
+      "Gatekeeper.Models/1.0.0": {
+        "runtime": {
+          "Gatekeeper.Models.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Auth.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Gatekeeper.Models/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
