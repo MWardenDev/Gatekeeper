@@ -6,10 +6,10 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
-    .CreateLogger();
+// Configure Serilog early
+LoggerConfigurator.Configure(builder.Configuration);
 
+// Use Serilog for logging
 builder.Host.UseSerilog();
 
 // Add services to the container.
@@ -34,6 +34,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<Gatekeeper.Api.Middleware.TracingEnrichmentMiddleware>();
 
 app.UseAuthorization();
 
