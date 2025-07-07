@@ -2,19 +2,26 @@ using Auth.Core;
 using Gatekeeper.Api.Services;
 using Logging.Core;
 using Routing.Core;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
 
+builder.Host.UseSerilog();
+
+// Add services to the container.
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Add custom services
 builder.Services.AddScoped<IAuthenticator, FakeAuthenticator>();
-builder.Services.AddScoped<ILoggerService, ConsoleLogger>();
+builder.Services.AddScoped<ILoggerService, SerilogLogger>();
 builder.Services.AddScoped<IMessageRouter, EchoRouter>();
 
 var app = builder.Build();
