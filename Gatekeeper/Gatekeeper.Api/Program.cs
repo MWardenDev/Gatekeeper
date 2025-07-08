@@ -22,7 +22,10 @@ builder.Services.AddSwaggerGen();
 // Add custom services
 builder.Services.AddScoped<IAuthenticator, FakeAuthenticator>();
 builder.Services.AddScoped<ILoggerService, SerilogLogger>();
-builder.Services.AddScoped<IMessageRouter, EchoRouter>();
+builder.Services.AddScoped<IRoutingStrategyService, RoutingStrategyService>();
+builder.Services.AddScoped<IRouteExecutorService, RouteExecutorService>();
+builder.Services.AddScoped<IRouteRepository, InMemoryRouteRepository>();
+
 
 var app = builder.Build();
 
