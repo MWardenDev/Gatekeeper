@@ -1,6 +1,7 @@
 using Auth.Core;
 using Gatekeeper.Api.Services;
 using Logging.Core;
+using Recovery.Core;
 using Routing.Core;
 using Serilog;
 
@@ -21,10 +22,11 @@ builder.Services.AddSwaggerGen();
 
 // Add custom services
 builder.Services.AddScoped<IAuthenticator, FakeAuthenticator>();
-builder.Services.AddScoped<ILoggerService, SerilogLogger>();
+builder.Services.AddScoped<ILoggerService, SerilogLoggerService>();
 builder.Services.AddScoped<IRoutingStrategyService, RoutingStrategyService>();
 builder.Services.AddScoped<IRouteExecutorService, RouteExecutorService>();
 builder.Services.AddScoped<IRouteRepository, InMemoryRouteRepository>();
+builder.Services.AddScoped<IMessageRetryService, MessageRetryService>();
 
 
 var app = builder.Build();
