@@ -13,6 +13,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Gatekeeper.Models\Gatekeeper.Models.csproj" />
+    <ProjectReference Include="..\Logging.Core\Logging.Core.csproj" />
+    <ProjectReference Include="..\Routing.Core\Routing.Core.csproj" />
   </ItemGroup>
 
 </Project>
