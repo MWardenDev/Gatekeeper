@@ -27,7 +27,8 @@ namespace Recovery.Core {
         public async Task RetryMessageAsync(string fileName) {
             var wrapper = await _persistence.LoadMessageAsync(fileName);
             if(wrapper == null) {
-                _logger.LogInfo($"Retry failed: could not load message from file {fileName}");
+                _logger.LogError($"Retry failed: could not load message from file {fileName}");
+
                 return;
             }
 

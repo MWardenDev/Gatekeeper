@@ -1,4 +1,4 @@
-using Auth.Core;
+﻿using Auth.Core;
 using Gatekeeper.Api.Services;
 using Logging.Core;
 using Recovery.Core;
@@ -11,7 +11,13 @@ var builder = WebApplication.CreateBuilder(args);
 LoggerConfigurator.Configure(builder.Configuration);
 
 // Use Serilog for logging
-builder.Host.UseSerilog();
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
+
+builder.Host.UseSerilog(Log.Logger);
+builder.Services.AddSingleton<Serilog.ILogger>(Log.Logger);  // ✅ Needed for DI into SerilogLoggerService
+
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -27,6 +33,12 @@ builder.Services.AddScoped<IRoutingStrategyService, RoutingStrategyService>();
 builder.Services.AddScoped<IRouteExecutorService, RouteExecutorService>();
 builder.Services.AddScoped<IRouteRepository, InMemoryRouteRepository>();
 builder.Services.AddScoped<IMessageRetryService, MessageRetryService>();
+builder.Services.AddHostedService<StartupRecoveryHostedService>();
+builder.Services.AddScoped<IMessagePersistenceService>(provider => {
+    var logger = provider.GetRequiredService<ILogger<FileMessagePersistenceService>>();
+    var rootPath = Path.Combine(AppContext.BaseDirectory, "Recovery");
+    return new FileMessagePersistenceService(rootPath, logger);
+});
 
 
 var app = builder.Build();
