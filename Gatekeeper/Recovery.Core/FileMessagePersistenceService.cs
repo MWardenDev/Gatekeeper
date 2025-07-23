@@ -1,7 +1,6 @@
 ﻿using Gatekeeper.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Recovery.Core.Models;
 using System.Text.Json;
 
 namespace Recovery.Core {
@@ -11,13 +10,15 @@ namespace Recovery.Core {
 
         public FileMessagePersistenceService(string rootPath, ILogger<FileMessagePersistenceService> logger) {
             _logger = logger;
-            _baseDirectory = Path.Combine(rootPath, "Recovery");
+            _baseDirectory = rootPath;
 
             if(!Directory.Exists(_baseDirectory))
                 Directory.CreateDirectory(_baseDirectory);
+
+            _logger.LogInformation("The Recovery base directory path has been set to {Path}", _baseDirectory);
         }
 
-        public async Task<MessageWrapper?> LoadMessageAsync(string fileName) {
+        public async Task<GatekeeperMessage?> LoadMessageAsync(string fileName) {
             var fullPath = Path.Combine(_baseDirectory, fileName);
             if(!File.Exists(fullPath)) {
                 _logger.LogWarning("Load failed: File not found for {FileName}", fileName);
@@ -26,7 +27,7 @@ namespace Recovery.Core {
 
             try {
                 var json = await File.ReadAllTextAsync(fullPath);
-                var wrapper = JsonSerializer.Deserialize<MessageWrapper>(json);
+                var wrapper = JsonSerializer.Deserialize<GatekeeperMessage>(json);
                 return wrapper;
             } catch(Exception ex) {
                 _logger.LogError(ex, "Failed to load and deserialize message from {FileName}", fileName);
@@ -39,23 +40,23 @@ namespace Recovery.Core {
             var id = Guid.NewGuid().ToString("N");
             var filePath = Path.Combine(_baseDirectory, $"{id}.json");
 
-            var wrapper = new MessageWrapper {
+            var wrapper = new GatekeeperMessage {
                 Message = message,
                 Headers = context?.Request?.Headers?.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToString()) ?? new Dictionary<string, string>(),
-                Timestamp = DateTimeOffset.UtcNow
+                Timestamp = DateTime.UtcNow
             };
 
             var json = JsonSerializer.Serialize(wrapper);
             await File.WriteAllTextAsync(filePath, json);
         }
 
-        public async Task<List<(string fileName, MessageWrapper wrapper)>> GetPendingMessagesAsync() {
+        public async Task<List<(string fileName, GatekeeperMessage wrapper)>> GetPendingMessagesAsync() {
             var files = Directory.GetFiles(_baseDirectory, "*.json");
-            var messages = new List<(string, MessageWrapper)>();
+            var messages = new List<(string, GatekeeperMessage)>();
 
             foreach(var file in files) {
                 var json = await File.ReadAllTextAsync(file);
-                var wrapper = JsonSerializer.Deserialize<MessageWrapper>(json);
+                var wrapper = JsonSerializer.Deserialize<GatekeeperMessage>(json);
                 if(wrapper != null) {
                     messages.Add((Path.GetFileName(file), wrapper));
                 }

@@ -1,10 +1,11 @@
 ﻿// File: IRoutingStrategyService.cs
+using Gatekeeper.Models;
 using Microsoft.AspNetCore.Http;
 using Routing.Core.Models;
 
 namespace Routing.Core {
     public interface IRoutingStrategyService {
-        Task<RouteDefinition> DetermineRouteAsync(HttpContext context);
+        Task<RouteDefinition> DetermineRouteAsync(GatekeeperMessage message);
 
         /// <summary>
         /// Resolves the logical target endpoint from the incoming request (typically the path or headers).

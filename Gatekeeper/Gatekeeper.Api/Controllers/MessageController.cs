@@ -38,7 +38,13 @@ namespace Gatekeeper.Api.Controllers
 
             _logger.LogReceived(message);
 
-            var route = await _routingStrategy.DetermineRouteAsync(HttpContext);
+            var gatekeeperMessage = new GatekeeperMessage {
+                Message = message,
+                Headers = HttpContext.Request.Headers.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToString()),
+                Timestamp = DateTimeOffset.UtcNow
+            };
+
+            var route = await _routingStrategy.DetermineRouteAsync(gatekeeperMessage);
             await _routeExecutor.ExecuteRouteAsync(route, message, HttpContext);
 
             return Accepted();

@@ -3,6 +3,8 @@ using Gatekeeper.Api.Services;
 using Logging.Core;
 using Recovery.Core;
 using Routing.Core;
+using Routing.Core.Config;
+using Routing.Core.Models;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,23 +30,30 @@ builder.Services.AddSwaggerGen();
 
 // Add custom services
 builder.Services.AddScoped<IAuthenticator, FakeAuthenticator>();
-builder.Services.AddScoped<ILoggerService, SerilogLoggerService>();
-builder.Services.AddScoped<IRoutingStrategyService, RoutingStrategyService>();
-builder.Services.AddScoped<IRouteExecutorService, RouteExecutorService>();
-builder.Services.AddScoped<IRouteRepository, InMemoryRouteRepository>();
-builder.Services.AddScoped<IMessageRetryService, MessageRetryService>();
+builder.Services.AddSingleton<ILoggerService, SerilogLoggerService>();
+builder.Services.AddSingleton<IRoutingStrategyService, RoutingStrategyService>();
+builder.Services.AddSingleton<IRouteExecutorService, RouteExecutorService>();
+builder.Services.AddSingleton<IRouteRepository, InMemoryRouteRepository>();
 builder.Services.AddHostedService<StartupRecoveryHostedService>();
-builder.Services.AddScoped<IMessagePersistenceService>(provider => {
+builder.Services.AddSingleton<IMessagePersistenceService>(provider => {
     var logger = provider.GetRequiredService<ILogger<FileMessagePersistenceService>>();
-    var rootPath = Path.Combine(AppContext.BaseDirectory, "Recovery");
+    var config = provider.GetRequiredService<IConfiguration>();
+    var rootPath = config.GetValue<string>("RecoveryStoragePath")
+                   ?? Path.Combine(AppContext.BaseDirectory, "Recovery");
     return new FileMessagePersistenceService(rootPath, logger);
 });
 
+builder.Services.AddSingleton<IMessageRetryService, MessageRetryService>();
+
+builder.Services.AddSingleton<IMessageRetryService, MessageRetryService>();
+
+builder.Services.Configure<RouteDefinitionMap>(
+    builder.Configuration.GetSection("Routes"));
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if(app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();

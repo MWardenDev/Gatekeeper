@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Recovery.Core;
-using Recovery.Core.Models;
 using System;
 using System.IO;
 using System.Linq;
@@ -27,13 +26,13 @@ namespace Gatekeeper.Tests.Recovery {
 
         [Fact]
         public async Task PersistMessageAsync_CreatesFileSuccessfully() {
-            var message = new MessageWrapper {
+            var message = new GatekeeperMessage {
                 Message = new MessageDto {
                     SenderId = "TestSender",
                     MessageType = "TestType",
                     Payload = "TestPayload"
                 },
-                Timestamp = DateTime.UtcNow
+                Timestamp = DateTimeOffset.UtcNow
             };
 
             var context = new DefaultHttpContext();
@@ -48,13 +47,13 @@ namespace Gatekeeper.Tests.Recovery {
 
         [Fact]
         public async Task GetPendingMessagesAsync_ReturnsPersistedMessages() {
-            var message = new MessageWrapper {
+            var message = new GatekeeperMessage {
                 Message = new MessageDto {
                     SenderId = "AnotherSender",
                     MessageType = "AnotherType",
                     Payload = "AnotherPayload"
                 },
-                Timestamp = DateTime.UtcNow
+                Timestamp = DateTimeOffset.UtcNow
             };
 
             var context = new DefaultHttpContext();
@@ -94,7 +93,7 @@ namespace Gatekeeper.Tests.Recovery {
             var fileName = $"{id}.json";
             var filePath = Path.Combine(_testDirectory, "Recovery", fileName);
 
-            var expected = new MessageWrapper {
+            var expected = new GatekeeperMessage {
                 Message = new MessageDto {
                     SenderId = "LoadTestSender",
                     MessageType = "LoadTestType",

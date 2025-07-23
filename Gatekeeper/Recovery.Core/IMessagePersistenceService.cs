@@ -1,6 +1,5 @@
 ﻿using Gatekeeper.Models;
 using Microsoft.AspNetCore.Http;
-using Recovery.Core.Models;
 
 namespace Recovery.Core {
     public interface IMessagePersistenceService {
@@ -12,14 +11,14 @@ namespace Recovery.Core {
         /// <summary>
         /// Loads all pending messages that were saved due to prior failures or shutdowns.
         /// </summary>
-        Task<List<(string fileName, MessageWrapper wrapper)>> GetPendingMessagesAsync();
+        Task<List<(string fileName, GatekeeperMessage wrapper)>> GetPendingMessagesAsync();
 
         /// <summary>
         /// Deletes a message file after successful processing or permanent failure.
         /// </summary>
         Task DeleteMessageAsync(string fileName);
 
-        Task<MessageWrapper?> LoadMessageAsync(string id);
+        Task<GatekeeperMessage?> LoadMessageAsync(string id);
 
     }
 }

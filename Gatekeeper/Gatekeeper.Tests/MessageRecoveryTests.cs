@@ -3,7 +3,6 @@ using Logging.Core;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using Recovery.Core;
-using Recovery.Core.Models;
 using Routing.Core;
 using Routing.Core.Models;
 using System;
@@ -35,24 +34,24 @@ namespace Gatekeeper.Tests.Recovery {
         [Fact]
         public async Task RetryAllMessagesAsync_ExecutesAndDeletesSuccessfulMessages() {
             // Arrange
-            var message = new MessageWrapper {
+            var message = new GatekeeperMessage {
                 Message = new MessageDto {
                     SenderId = "sender",
                     MessageType = "type",
                     Payload = "data"
                 },
-                Timestamp = DateTimeOffset.UtcNow
+                Timestamp = DateTime.UtcNow
             };
 
             _mockPersistence.Setup(p => p.GetPendingMessagesAsync())
-                .ReturnsAsync(new List<(string, MessageWrapper)> {
+                .ReturnsAsync(new List<(string, GatekeeperMessage)> {
             ("test.json", message)
                 });
 
             _mockPersistence.Setup(p => p.LoadMessageAsync("test.json"))
                 .ReturnsAsync(message);
 
-            _mockStrategy.Setup(s => s.DetermineRouteAsync(It.IsAny<HttpContext>()))
+            _mockStrategy.Setup(s => s.DetermineRouteAsync(It.IsAny<GatekeeperMessage>()))
                 .ReturnsAsync(new RouteDefinition {
                     TargetAddress = "http://dummy",
                     TargetType = "Http"
@@ -80,17 +79,17 @@ namespace Gatekeeper.Tests.Recovery {
         public async Task RetryAllMessagesAsync_LogsError_WhenExecutionFails() {
             // Arrange
             var fileName = "badmsg.json";
-            var wrapper = new MessageWrapper {
+            var wrapper = new GatekeeperMessage {
                 Message = new MessageDto {
                     SenderId = "fail-sender",
                     MessageType = "fail-type",
                     Payload = "broken"
                 },
                 Headers = new Dictionary<string, string>(),
-                Timestamp = DateTimeOffset.UtcNow
+                Timestamp = DateTime.UtcNow
             };
 
-            var pending = new List<(string, MessageWrapper)>
+            var pending = new List<(string, GatekeeperMessage)>
             {
                 (fileName, wrapper)
             };
@@ -98,7 +97,7 @@ namespace Gatekeeper.Tests.Recovery {
             _mockPersistence.Setup(p => p.GetPendingMessagesAsync())
                 .ReturnsAsync(pending);
 
-            _mockStrategy.Setup(s => s.DetermineRouteAsync(It.IsAny<HttpContext>()))
+            _mockStrategy.Setup(s => s.DetermineRouteAsync(It.IsAny<GatekeeperMessage>()))
                 .ReturnsAsync(new RouteDefinition {
                     TargetType = "Http",
                     TargetAddress = "https://example.com"

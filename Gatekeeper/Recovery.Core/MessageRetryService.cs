@@ -28,24 +28,31 @@ namespace Recovery.Core {
             var wrapper = await _persistence.LoadMessageAsync(fileName);
             if(wrapper == null) {
                 _logger.LogError($"Retry failed: could not load message from file {fileName}");
-
                 return;
             }
 
-            var context = new DefaultHttpContext();
-            foreach(var kvp in wrapper.Headers)
-                context.Request.Headers[kvp.Key] = kvp.Value;
-
             try {
-                var route = await _routingStrategy.DetermineRouteAsync(context);
+                var route = await _routingStrategy.DetermineRouteAsync(wrapper); // wrapper is GatekeeperMessage
+
+                if(route == null) {
+                    _logger.LogError($"Retry failed for file {fileName}: No route resolved.");
+                    return;
+                }
+
+                // Fake context ONLY IF required by ExecuteRouteAsync
+                var context = new DefaultHttpContext();
+                foreach(var kvp in wrapper.Headers)
+                    context.Request.Headers[kvp.Key] = kvp.Value;
+
                 await _routeExecutor.ExecuteRouteAsync(route, wrapper.Message, context);
                 await _persistence.DeleteMessageAsync(fileName);
-                _logger.LogInfo($"Retry successful for file: {fileName}");
 
+                _logger.LogInfo($"Retry successful for file: {fileName}");
             } catch(Exception ex) {
                 _logger.LogError($"Retry failed for file {fileName}: {ex.Message}");
             }
         }
+
 
         public async Task RetryAllPendingMessagesAsync() {
             var messages = await _persistence.GetPendingMessagesAsync();

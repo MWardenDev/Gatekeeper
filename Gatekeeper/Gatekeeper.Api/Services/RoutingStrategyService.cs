@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Gatekeeper.Models;
+using Microsoft.AspNetCore.Http;
 using Routing.Core;
 using Routing.Core.Models;
 using System;
@@ -17,8 +18,9 @@ namespace Routing.Core {
             _routeRepository = routeRepository;
         }
 
-        public string ResolveTargetEndpoint(HttpContext context) {
+        public string ResolveTargetEndpoint(HttpContext context) {            
             var path = context.Request.Path.Value ?? string.Empty;
+            _logger.LogDebug("Trying to match {context}", path);
             var endpoint = path.Trim('/').Split('/').FirstOrDefault();
 
             _logger.LogDebug("Resolved endpoint from path '{Path}' as '{Endpoint}'", path, endpoint);
@@ -29,6 +31,8 @@ namespace Routing.Core {
         public async Task<RouteDefinition> DetermineRouteAsync(HttpContext context) {
             var endpoint = ResolveTargetEndpoint(context);
 
+            _logger.LogDebug("The found endpoint is: {0}", endpoint);
+
             var route = await _routeRepository.GetRouteForEndpointAsync(endpoint);
 
             if(route == null) {
@@ -37,6 +41,25 @@ namespace Routing.Core {
             }
 
             return route;
+        }
+
+        public async Task<RouteDefinition?> DetermineRouteAsync(GatekeeperMessage message) {
+            var headers = message.Headers ?? new Dictionary<string, string>();
+            var path = headers.TryGetValue("Path", out var p1) ? p1
+                     : headers.TryGetValue(":path", out var p2) ? p2
+                     : null;
+
+            _logger.LogDebug("Extracted path from recovery message: {Path}", path);
+
+            if(string.IsNullOrWhiteSpace(path)) {
+                _logger.LogWarning("No path found in message headers.");
+                return null;
+            }
+
+            var endpoint = path.Trim('/').Split('/').FirstOrDefault();
+            _logger.LogDebug("Resolved endpoint from recovery path '{Path}' as '{Endpoint}'", path, endpoint);
+
+            return await _routeRepository.GetRouteForEndpointAsync(endpoint);
         }
     }
 }
